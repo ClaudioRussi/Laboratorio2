@@ -4,6 +4,7 @@ require_relative 'defense'
 require_relative 'forward'
 require_relative 'goalkeeper'
 require_relative 'midfielder'
+require_relative 'match'
 class Program
 
   #No entendi para que es necesario este metodo, ya que se puede crear la instancia con set_championship
@@ -26,7 +27,7 @@ class Program
     if @championship.teams.size == 0
       return 'No hay equipos para jugar!'
     elsif @championship.teams.size % 2 != 0
-      return 'Hay equipos que no son par'
+      return 'El numero de equipos no es par'
     elsif incomplete_team == true
       return 'Hay equipos incompletos'
     else
@@ -35,7 +36,16 @@ class Program
   end
 
   def championship_start
-    @championship.is_started = true
+    contador = 0
+    unless @championship.is_started
+      @championship.is_started = true
+      matches = @championship.teams.combination(2).to_a
+      matches.each do |match|
+        @Championship.matches << Match.new(contador, match[0], match[1])
+        contador = contador + 1
+      end
+
+    end
   end
 
   def championship_name
@@ -111,7 +121,11 @@ class Program
   end
 
   def matches_list
-    
+    to_return = []
+    @championship.matches.each do |match|
+      to_return << {id => match.id, description => "#{match.team_a.name} vs #{match.team_b.name}", result => "#{match.team_a_goals} - #{match.team_b_goals}", state => match.state }
+    end
+    to_return
   end
 
   def start_match(match_id)
