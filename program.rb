@@ -1,6 +1,9 @@
 require_relative 'championship'
 require_relative 'team'
-require_relative 'player'
+require_relative 'defense'
+require_relative 'forward'
+require_relative 'goalkeeper'
+require_relative 'midfielder'
 class Program
 
   #No entendi para que es necesario este metodo, ya que se puede crear la instancia con set_championship
@@ -58,23 +61,57 @@ class Program
         return 'Ya existe un jugador con esa cedula'
       end
     end
-    @championship.players_in_championship << Player.new(ci, name, birthdate)
+    case position 
+      when 'Defensa' 
+        @championship.players_in_championship << Defense.new(ci,name,birthdate) 
+
+      when 'Arquero' 
+        @championship.players_in_championship << GoalKeeper.new(ci,name,birthdate) 
+
+      when 'Volante' 
+        @championship.players_in_championship << Midfielder.new(ci,name,birthdate) 
+
+      when 'Delantero' 
+        @championship.players_in_championship << Forward.new(ci,name,birthdate) 
+
+     end
   end
 
   def add_player_to_team(team_name, player_id)
-    
+    @championship.players.each do |player|
+      if player.ci == player_id
+        chosen_player = player
+      end
+    end
+    @championship.teams.each do |team|
+      if team.name == team_name
+        chosen_team == team
+      end
+    end
+
+    chosen_team.players.each do |player|
+      if player.class == chosen_player.class && player.class == GoalKeeper
+        return 'Ese equipo ya tiene un arquero'
+      end
+    end
+
+    if chosen_team.players.size == @championship.teams_size
+      return 'Ese equipo ya esta completo'
+    else
+      chosen_team.players << chosen_player
+    end
   end
 
   def player_list
-    []
+    @championship.players_in_championship
   end
 
   def team_list
-    []
+    @championship.teams
   end
 
   def matches_list
-    []
+    
   end
 
   def start_match(match_id)

@@ -1,10 +1,7 @@
 require_relative 'player'
-class Denfense < Player
-
-  def initialize
-
-
-  end
+class Defense < Player
+  attr_accessor :intercepted_pass
+  
 
 
 

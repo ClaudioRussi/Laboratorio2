@@ -1,10 +1,7 @@
 require_relative 'player'
 class Midfielder < Player
-
-  def initialize
+  attr_accessor :goals
   
-
-  end
 
 
 
