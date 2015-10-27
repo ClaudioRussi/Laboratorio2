@@ -58,43 +58,52 @@ class Program
 
   def add_team(team_name)
     @championship.teams.each do |team|
-      if team.name == team_name
+      if team[:name]== team_name
         return 'Ya existe un equipo con ese nombre'
       end
     end
-    @championship.teams << Team.new(team_name)
+    team = Team.new(team_name)
+    @championship.teams << {:name => team.name, :players => team.players}
+    nil
   end
 
   def add_player(ci, name, birthdate, position)
     @championship.players_in_championship.each do |player|
-      if player.ci == ci
+      if player[:ci] == ci
         return 'Ya existe un jugador con esa cedula'
       end
     end
     case position 
       when 'Defensa' 
-        @championship.players_in_championship << Defense.new(ci,name,birthdate) 
-
+        defense = Defense.new(ci,name,birthdate,position) 
+        @championship.players_in_championship << {:ci => defense.ci, :name => defense.name, :birthdate => defense.birthdate, :position => defense.position }
+        nil
       when 'Arquero' 
-        @championship.players_in_championship << GoalKeeper.new(ci,name,birthdate) 
+        goalkeeper = GoalKeeper.new(ci,name,birthdate,position) 
+        @championship.players_in_championship << {:ci => goalkeeper.ci, :name => goalkeeper.name, :birthdate => goalkeeper.birthdate, :position => goalkeeper.position }
+        nil
 
-      when 'Volante' 
-        @championship.players_in_championship << Midfielder.new(ci,name,birthdate) 
+      when 'Volante'
+        mid_fielder = Midfielder.new(ci,name,birthdate,position) 
+        @championship.players_in_championship << {:ci => mid_fielder.ci, :name => mid_fielder.name, :birthdate => mid_fielder.birthdate, :position => mid_fielder.position }
+        nil
+        
 
-      when 'Delantero' 
-        @championship.players_in_championship << Forward.new(ci,name,birthdate) 
-
+      when 'Delantero'
+        forward = Forward.new(ci,name,birthdate,position) 
+        @championship.players_in_championship << {:ci => forward.ci, :name => forward.name, :birthdate => forward.birthdate, :position => forward.position }
+        nil
      end
   end
 
   def add_player_to_team(team_name, player_id)
     @championship.players.each do |player|
-      if player.ci == player_id
+      if player[:ci] == player_id
         chosen_player = player
       end
     end
     @championship.teams.each do |team|
-      if team.name == team_name
+      if team[:name] == team_name
         chosen_team == team
       end
     end
