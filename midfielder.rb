@@ -1,6 +1,6 @@
 require_relative 'player'
 class Midfielder < Player
-  attr_accessor :goals
+  attr_accessor :percentage_passes, :goals
   
 
 

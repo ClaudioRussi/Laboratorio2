@@ -5,6 +5,7 @@ require_relative 'forward'
 require_relative 'goalkeeper'
 require_relative 'midfielder'
 require_relative 'match'
+require_relative 'converter'
 class Program
 
   #No entendi para que es necesario este metodo, ya que se puede crear la instancia con set_championship
@@ -58,52 +59,46 @@ class Program
 
   def add_team(team_name)
     @championship.teams.each do |team|
-      if team[:name]== team_name
+      if team.name== team_name
         return 'Ya existe un equipo con ese nombre'
       end
     end
-    team = Team.new(team_name)
-    @championship.teams << {:name => team.name, :players => team.players}
+    @championship.teams << Team.new(team_name)
     nil
   end
 
   def add_player(ci, name, birthdate, position)
     @championship.players_in_championship.each do |player|
-      if player[:ci] == ci
+      if player.ci == ci
         return 'Ya existe un jugador con esa cedula'
       end
     end
     case position 
       when 'Defensa' 
-        defense = Defense.new(ci,name,birthdate,position) 
-        @championship.players_in_championship << {:ci => defense.ci, :name => defense.name, :birthdate => defense.birthdate, :position => defense.position }
+        @championship.players_in_championship << Defense.new(ci,name,birthdate,position) 
         nil
       when 'Arquero' 
-        goalkeeper = GoalKeeper.new(ci,name,birthdate,position) 
-        @championship.players_in_championship << {:ci => goalkeeper.ci, :name => goalkeeper.name, :birthdate => goalkeeper.birthdate, :position => goalkeeper.position }
+        @championship.players_in_championship << GoalKeeper.new(ci,name,birthdate,position)          
         nil
 
       when 'Volante'
-        mid_fielder = Midfielder.new(ci,name,birthdate,position) 
-        @championship.players_in_championship << {:ci => mid_fielder.ci, :name => mid_fielder.name, :birthdate => mid_fielder.birthdate, :position => mid_fielder.position }
+        @championship.players_in_championship << Midfielder.new(ci,name,birthdate,position) 
         nil
         
-
       when 'Delantero'
-        forward = Forward.new(ci,name,birthdate,position) 
-        @championship.players_in_championship << {:ci => forward.ci, :name => forward.name, :birthdate => forward.birthdate, :position => forward.position }
+        @championship.players_in_championship << Forward.new(ci,name,birthdate,position)
         nil
      end
   end
 
   def add_player_to_team(team_name, player_id)
     @championship.players.each do |player|
-      if player[:ci] == player_id
+      if player.ci == player_id
         chosen_player = player
       end
     end
     @championship.teams.each do |team|
-      if team[:name] == team_name
+      if team.name == team_name
         chosen_team == team
       end
     end
@@ -122,11 +117,19 @@ class Program
   end
 
   def player_list
-    @championship.players_in_championship
+    player_list_to_p=[]
+    @championship.players_in_championship.each do |player|
+      player_list_to_p << Converter.player_converter(player)
+    end
+    player_list_to_p
   end
 
   def team_list
-    @championship.teams
+    team_list=[]
+    @championship.teams.each do |team|
+      team_list << Converter.team_converter(team)
+    end
+    team_list
   end
 
   def matches_list
