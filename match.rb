@@ -6,6 +6,7 @@ class Match
     @team_a = team_a
     @team_b = team_b
     @state = :pending
+    @news = []
 
   end
 

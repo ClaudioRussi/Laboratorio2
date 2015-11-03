@@ -19,3 +19,24 @@ class Converter
 
   
 end
+
+class Identifier
+  def self.identify(selector, list)
+    list.each do |identified|
+      if identified.class.superclass == Player
+        if identified.ci == selector
+          return identified
+        end
+      elsif identified.class == Team
+        if identified.name == selector
+          return identified
+        end
+      else
+        if identified.id == selector
+          return identified
+        end
+      end
+    end
+  end
+  nil
+end
